@@ -1,0 +1,43 @@
+using System.Collections;
+using UnityEngine;
+
+public class MultipleTap : MonoBehaviour {
+    public int touchCount { get; private set; }
+    float inputLimit = 0.3f;
+    float additionalTime;
+
+    public void PressButton() {
+        if (touchCount <= 0) {
+            StartCoroutine(CountWaitTime());
+            touchCount = 1;
+        }else{
+            //Can change the additional limit here
+            //variable one's ex. 0.2f - (0.1f * touchcount)
+            additionalTime += 0.1f; 
+            touchCount ++;
+        }
+    }
+    IEnumerator CountWaitTime() {
+        yield return new WaitForSeconds(inputLimit);
+
+        while(additionalTime > 0f){
+            float preLimit = additionalTime;
+            yield return new WaitForSeconds(additionalTime);
+            //For getting out of the loop.
+            //If player press a button by the limit, this loop again.
+            additionalTime -= preLimit;
+        }
+
+        switch (touchCount){
+            case 1:
+                Debug.Log("SingleTap");
+                break;
+            default:
+                Debug.Log(touchCount + "Tap");
+                break;
+        }
+        touchCount = 0;
+        //This may be subtracted enough, but for the standardization.
+        additionalTime = 0.0f;
+    }
+}
