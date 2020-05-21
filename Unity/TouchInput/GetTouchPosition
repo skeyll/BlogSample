@@ -1,0 +1,26 @@
+using System; //イベントハンドラに必要。
+using UnityEngine;
+using TouchScript.Gestures; //Tap入力に必要。
+
+public class GetTouchPosition : MonoBehaviour
+{
+//関数を使うため取得。Startで取得してもいい。
+[SerializeField]
+TapGesture tapGesture; 
+
+void OnEnable()
+{
+　//Serializeで取得してるため、ここでGetComponentする必要はない。
+　tapGesture.Tapped += OnTapped;
+}
+
+void OnDisable()
+{
+　tapGesture.Tapped += onTapped;
+}
+
+void OnTapped(object sender, EventArgs e)
+{
+　Vector2 tapPosition = tapGesture.ScreenPosition;
+　Debug.Log(tapPosition + "をタップした");
+}
